@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WaniCam</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='%23246bfd'/%3E%3Ccircle cx='12' cy='12' r='4' fill='white'/%3E%3C/svg%3E">
+</head>
+<body>
+<header>
+  <h1>WaniCam</h1>
+  <nav>
+    <button class="tab active" data-view="cameras">Cameras</button>
+    <button class="tab" data-view="discover">Discover</button>
+    <button class="tab" data-view="add">Add camera</button>
+  </nav>
+  <div id="banner" class="banner" hidden></div>
+</header>
+
+<main>
+  <section id="view-cameras" class="view">
+    <div class="toolbar">
+      <label>Layout
+        <select id="layout"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select>
+      </label>
+      <label>Frame rate
+        <select id="fps"><option>5</option><option selected>10</option><option>15</option><option>25</option></select>
+      </label>
+      <label>Width
+        <select id="width"><option value="">Original</option><option value="1280">1280</option><option value="960" selected>960</option><option value="640">640</option></select>
+      </label>
+      <button id="webcam-btn" class="secondary">Show this computer's webcam</button>
+    </div>
+    <div id="grid" class="grid"></div>
+    <p id="empty" class="empty" hidden>No cameras yet. Use <b>Discover</b> to find cameras on your network, or <b>Add camera</b> to enter one by address.</p>
+  </section>
+
+  <section id="view-discover" class="view" hidden>
+    <div class="card">
+      <h2>Find cameras on your network</h2>
+      <p class="muted">Listens for ONVIF, mDNS (Bonjour) and UPnP announcements, and checks common camera ports on your local network. Nothing is logged into.</p>
+      <div class="row">
+        <label class="grow">Networks to scan (comma separated)
+          <input id="subnets" placeholder="192.168.1.0/24">
+        </label>
+        <label class="check"><input type="checkbox" id="do-scan" checked> Port scan</label>
+        <button id="discover-btn">Scan</button>
+      </div>
+      <div id="discover-status" class="muted"></div>
+    </div>
+    <table id="discover-table" class="table" hidden>
+      <thead><tr><th>Address</th><th>Looks like</th><th>Name / model</th><th>Found by</th><th>Open ports</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section id="view-add" class="view" hidden>
+    <div class="subtabs">
+      <button class="subtab active" data-sub="auto">Find streams automatically</button>
+      <button class="subtab" data-sub="manual">Enter a stream URL</button>
+      <button class="subtab" data-sub="local">USB / built-in camera</button>
+    </div>
+
+    <div id="sub-auto" class="card sub">
+      <p class="muted">Enter the camera's address and its own login. WaniCam asks the camera over ONVIF for its streams, then tries the known URL formats for the brand.</p>
+      <form id="auto-form" class="form">
+        <label>Camera address (IP or host name)<input name="host" required placeholder="192.168.1.64"></label>
+        <label>Brand<select name="brand" id="brand-select"><option value="auto">Detect automatically</option></select></label>
+        <label>Username<input name="user" autocomplete="off" placeholder="admin"></label>
+        <label>Password<input name="password" type="password" autocomplete="new-password"></label>
+        <details class="span2"><summary>Advanced</summary>
+          <div class="form">
+            <label>Channel (for NVR/DVR)<input name="channel" type="number" min="1" value="1"></label>
+            <label>RTSP port<input name="rtsp_port" type="number" placeholder="554"></label>
+            <label>HTTP port<input name="http_port" type="number" placeholder="80"></label>
+            <label class="check"><input type="checkbox" name="onvif" checked> Use ONVIF</label>
+          </div>
+        </details>
+        <div class="span2"><button type="submit">Find streams</button> <span id="auto-status" class="muted"></span></div>
+      </form>
+      <div id="auto-results"></div>
+    </div>
+
+    <div id="sub-manual" class="card sub" hidden>
+      <p class="muted">Works with any RTSP, RTSPS, RTMP, HLS (.m3u8), HTTP MJPEG or JPEG snapshot URL.</p>
+      <form id="manual-form" class="form">
+        <input type="hidden" name="id">
+        <label class="span2">Stream URL<input name="url" required placeholder="rtsp://192.168.1.64:554/Streaming/Channels/101"></label>
+        <label>Name<input name="name" placeholder="Front door"></label>
+        <label>Type<select name="kind">
+          <option value="">Detect from URL</option>
+          <option value="rtsp">RTSP / RTSPS</option>
+          <option value="mjpeg">HTTP MJPEG stream</option>
+          <option value="snapshot">HTTP JPEG snapshot (refreshed)</option>
+          <option value="ffmpeg">Other (RTMP, HLS, anything ffmpeg plays)</option>
+        </select></label>
+        <label>Username<input name="user" autocomplete="off"></label>
+        <label>Password<input name="password" type="password" autocomplete="new-password" placeholder=""></label>
+        <label>RTSP transport<select name="transport"><option value="tcp">TCP (most reliable)</option><option value="udp">UDP</option><option value="http">HTTP tunnel</option></select></label>
+        <label>Snapshot refresh (per second)<input name="fps" type="number" min="1" max="30" placeholder="1"></label>
+        <div class="span2"><button type="button" id="manual-test" class="secondary">Test</button> <button type="submit">Save camera</button> <span id="manual-status" class="muted"></span></div>
+      </form>
+      <details><summary>URL formats for common brands</summary><div id="pattern-help" class="muted small"></div></details>
+    </div>
+
+    <div id="sub-local" class="card sub" hidden>
+      <p class="muted">Cameras plugged into the computer running WaniCam (needs ffmpeg). To just look at the webcam of the computer you are browsing from, use "Show this computer's webcam" on the Cameras tab.</p>
+      <div id="local-list"></div>
+    </div>
+  </section>
+</main>
+
+<dialog id="viewer"><div class="viewer-head"><span id="viewer-title"></span><button id="viewer-close" class="secondary">Close</button></div><img id="viewer-img" alt=""></dialog>
+<script src="app.js"></script>
+</body>
+</html>
