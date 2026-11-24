@@ -11,6 +11,12 @@ username and password you type in for each camera. It never guesses passwords
 or tries default logins, and it stops after the first rejected login so the
 camera doesn't lock your account.
 
+## Android app
+
+There's also an Android app with the same discovery and camera support. See
+[android/README.md](android/README.md). The latest APK is always on the
+[android-latest release](https://github.com/RareTango/WaniCam/releases/tag/android-latest).
+
 ## What it works with
 
 **Finding cameras**

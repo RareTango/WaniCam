@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="brand">#5B8CFF</color>
+    <color name="tile_bg">#000000</color>
+    <color name="ok">#5CC983</color>
+    <color name="bad">#EF6B6B</color>
+</resources>
