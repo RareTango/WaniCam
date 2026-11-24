@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/nav_cameras" android:icon="@drawable/ic_videocam" android:title="@string/tab_cameras" />
+    <item android:id="@+id/nav_discover" android:icon="@drawable/ic_search" android:title="@string/tab_discover" />
+    <item android:id="@+id/nav_add" android:icon="@drawable/ic_add" android:title="@string/tab_add" />
+</menu>

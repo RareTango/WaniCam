@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WaniCam</string>
+    <string name="tab_cameras">Cameras</string>
+    <string name="tab_discover">Discover</string>
+    <string name="tab_add">Add camera</string>
+    <string name="empty_cameras">No cameras yet.\n\nUse Discover to find cameras on your Wi-Fi, or Add camera to enter one by address.</string>
+    <string name="columns">Columns</string>
+    <string name="discover_intro">Listens for ONVIF, Bonjour and UPnP announcements and checks common camera ports on your Wi-Fi network. Nothing is logged into.</string>
+    <string name="subnets">Network to scan</string>
+    <string name="port_scan">Port scan</string>
+    <string name="scan">Scan</string>
+    <string name="set_up">Set up</string>
+    <string name="mode_auto">Find automatically</string>
+    <string name="mode_manual">Enter URL</string>
+    <string name="auto_intro">Enter the camera\'s address and its own login. WaniCam asks the camera over ONVIF for its streams, then tries the known URL formats for the brand.</string>
+    <string name="manual_intro">Works with RTSP, HLS (.m3u8), RTMP, HTTP MJPEG and JPEG snapshot URLs.</string>
+    <string name="host">Camera address (IP or host name)</string>
+    <string name="brand">Brand</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="channel">Channel (NVR/DVR)</string>
+    <string name="rtsp_port">RTSP port</string>
+    <string name="http_port">HTTP port</string>
+    <string name="use_onvif">Use ONVIF</string>
+    <string name="find_streams">Find streams</string>
+    <string name="stream_url">Stream URL</string>
+    <string name="name">Name</string>
+    <string name="type">Type</string>
+    <string name="transport">RTSP transport</string>
+    <string name="test">Test</string>
+    <string name="save">Save camera</string>
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="remove">Remove</string>
+</resources>
