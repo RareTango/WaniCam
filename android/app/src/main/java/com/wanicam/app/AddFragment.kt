@@ -201,12 +201,12 @@ class AddFragment : Fragment(R.layout.fragment_add) {
             setPadding(0, 16, 0, 16)
             gravity = android.view.Gravity.CENTER_VERTICAL
         }
-        val text = TextView(ctx).apply {
+        val label = TextView(ctx).apply {
             val desc = listOfNotNull(s.label, s.resolution, s.codec?.uppercase(), if (s.kind != "rtsp") s.kind.uppercase() else null)
                 .joinToString(" · ")
             text = "$desc\n${s.url}"
         }
-        row.addView(text, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+        row.addView(label, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
         val btn = MaterialButton(ctx).apply { text = getString(R.string.add) }
         btn.setOnClickListener { onAdd(btn) }
         row.addView(btn)
